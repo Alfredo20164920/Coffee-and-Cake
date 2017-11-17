@@ -1,49 +1,73 @@
 (function(){
-	var formulario = document.formulario_contacto,
-		elementos = formulario.elements;
 
+// Objeto con propiedades de formulario
+var propFormulario = {
 
-	function validarInputs(e){
+	formulario: document.formulario_contacto,
+	elementos: document.formulario_contacto.elements,
+	error: null,
+	textoError: null
 
-		for (var i = 0; i < elementos.length; i++) {
-			if (elementos[i].value == '') {
+}
+
+// Objeto con métodos de formulario
+
+var metFormulario = {
+
+	inicio: function () {
+		for (var i = 0; i < propFormulario.elementos.length; i++) {
+
+			if( propFormulario.elementos[i].type == 'text' || propFormulario.elementos[i].type == 'email' || propFormulario.elementos[i].nodeName.toLowerCase() == 'textarea' ){
+				propFormulario.elementos[i].addEventListener('focus', metFormulario.focusInput);
+				propFormulario.elementos[i].addEventListener('blur', metFormulario.blurInput);
+			}
+			
+		}
+
+		propFormulario.formulario.addEventListener('submit', metFormulario.validarInputs);
+	},
+
+	focusInput: function () {
+		this.parentElement.children[1].className = 'label active';
+	},
+
+	blurInput: function () {
+		if (this.value == '') {
+			this.parentElement.children[1].className = 'label';
+		}
+	},
+
+	validarInputs: function (e) {
+		for (var i = 0; i < propFormulario.elementos.length; i++) {
+			
+			if ( propFormulario.elementos[i].value == '' ) {
 				e.preventDefault();
-				if (elementos[i].parentElement.children.length < 3) {
-					var error = document.createElement('p');
-					var textoError = document.createTextNode('Por favor llena el campo con tu ' + elementos[i].name);
-					error.className = 'error';
-					error.appendChild(textoError);
-					elementos[i].parentElement.appendChild(error);
+
+				if (propFormulario.elementos[i].parentElement.children.length < 3) {
+
+					propFormulario.error = document.createElement('p');
+					propFormulario.textoError = document.createTextNode('Por favor llena el campo con tu ' + propFormulario.elementos[i].name);
+					propFormulario.error.appendChild(propFormulario.textoError);
+					propFormulario.error.className = 'error';
+
+					propFormulario.elementos[i].parentElement.appendChild(propFormulario.error);
+
 				}
 				
 			} else{
-				if (elementos[i].parentElement.children.length >= 3){
-					var error = elementos[i].parentElement.getElementsByTagName('p')[0];
-					elementos[i].parentElement.removeChild(error);
+
+				if (propFormulario.elementos[i].parentElement.children.length >= 3) {
+					propFormulario.error = propFormulario.elementos[i].parentElement.getElementsByTagName('p')[0];
+					propFormulario.elementos[i].parentElement.removeChild(propFormulario.error);
 				}
+
 			}
-		}	
 
-	}
-
-	//Funciones blur y focus
-
-	function focusInput(){
-		this.parentElement.children[1].className = 'label active';
-	}
-	function blurInput(){
-		if (this.value <= 0 ) {
-			this.parentElement.children[1].className = 'label';
-		}
-	}
-	//Eventos
-	for(var i = 0; i<elementos.length; i++){
-		if ( elementos[i].type == 'text' || elementos[i].type == 'email' || elementos[i].nodeName.toLowerCase() == 'textarea' ) {
-		elementos[i].addEventListener('focus', focusInput);
-		elementos[i].addEventListener('blur', blurInput);
 		}
 	}
 
-	formulario.addEventListener('submit', validarInputs);	
+}
+
+metFormulario.inicio();
 
 }())

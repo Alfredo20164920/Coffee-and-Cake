@@ -6,11 +6,10 @@
 ==========================================*/
 
 
-var pslider = {
+var propSlider = {
 
 	slider: document.getElementById('slider'),
-	primerSlide: null,
-	ultimoSlide: null
+	primerSlide: null
 
 }
 
@@ -20,34 +19,30 @@ var pslider = {
 =            Metodos slider            =
 ======================================*/
 
-var mslider = {
-
+var metSlider = {
+	
 	inicio: function () {
-		pslider.primerSlide = pslider.slider.firstElementChild;
-		pslider.ultimoSlide = pslider.slider.lastElementChild;
-		pslider.slider.insertBefore(pslider.ultimoSlide, pslider.primerSlide);
-		pslider.slider.style.marginLeft = '-100%';
-
-		setInterval(mslider.moverSlide, 3000);
+		setInterval(metSlider.moverSlide, 3000);
 	},
 
 	moverSlide: function () {
-		pslider.slider.style.transition = 'all 1s ease';
-		pslider.slider.style.marginLeft = '-200%';
-				
-		setTimeout(function() {
-			pslider.primerSlide = pslider.slider.firstElementChild;
-			pslider.ultimoSlide = pslider.slider.lastElementChild;
-			pslider.slider.appendChild(pslider.slider.firstElementChild);
-			pslider.slider.style.transition = 'unset';
-			pslider.slider.style.marginLeft = '-100%';
+		propSlider.slider.style.transition = 'all 1s ease';
+		propSlider.slider.style.marginLeft = '-100%';
+
+		setTimeout(function () {
+			propSlider.primerSlide = propSlider.slider.firstElementChild;
+
+			propSlider.slider.appendChild(propSlider.primerSlide);
+
+			propSlider.slider.style.transition = 'unset';
+			propSlider.slider.style.marginLeft = 0;
+
 		}, 1000);
 	}
 
 }
 
-
-mslider.inicio();
+metSlider.inicio();
 
 
 
